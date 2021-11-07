@@ -8,9 +8,6 @@ export class AtmosphericConditions {
 
     private altitudeFromSim: Feet;
 
-    // TODO use tropo from mcdu
-    private tropo = 36090;
-
     private casFromSim: Knots;
 
     private tasFromSim: Knots;
@@ -21,7 +18,7 @@ export class AtmosphericConditions {
 
     private computedIsaDeviation: Celcius;
 
-    constructor() {
+    constructor(private tropoPause: Feet) {
         this.update();
     }
 
@@ -70,7 +67,7 @@ export class AtmosphericConditions {
     }
 
     predictStaticAirTemperatureAtAltitude(altitude: Feet): number {
-        return Common.getIsaTemp(altitude, altitude > this.tropo) + this.isaDeviation;
+        return Common.getIsaTemp(altitude, altitude > this.tropoPause) + this.isaDeviation;
     }
 
     totalAirTemperatureFromMach(altitude: Feet, mach: number) {
@@ -79,27 +76,27 @@ export class AtmosphericConditions {
     }
 
     computeMachFromCas(altitude: Feet, speed: Knots): number {
-        const deltaSrs = Common.getDelta(altitude, altitude > this.tropo);
+        const deltaSrs = Common.getDelta(altitude, altitude > this.tropoPause);
 
         return Common.CAStoMach(speed, deltaSrs);
     }
 
     computeCasFromMach(altitude: Feet, mach: Mach): number {
-        const deltaSrs = Common.getDelta(altitude, altitude > this.tropo);
+        const deltaSrs = Common.getDelta(altitude, altitude > this.tropoPause);
 
         return Common.machToCas(mach, deltaSrs);
     }
 
     computeCasFromTas(altitude: Feet, speed: Knots): Knots {
-        const thetaSrs = Common.getTheta(altitude, this.isaDeviation, altitude > this.tropo);
-        const deltaSrs = Common.getDelta(altitude, altitude > this.tropo);
+        const thetaSrs = Common.getTheta(altitude, this.isaDeviation, altitude > this.tropoPause);
+        const deltaSrs = Common.getDelta(altitude, altitude > this.tropoPause);
 
         return Common.TAStoCAS(speed, thetaSrs, deltaSrs);
     }
 
     computeTasFromCas(altitude: Feet, speed: Knots): Knots {
-        const thetaSrs = Common.getTheta(altitude, this.isaDeviation, altitude > this.tropo);
-        const deltaSrs = Common.getDelta(altitude, altitude > this.tropo);
+        const thetaSrs = Common.getTheta(altitude, this.isaDeviation, altitude > this.tropoPause);
+        const deltaSrs = Common.getDelta(altitude, altitude > this.tropoPause);
 
         return Common.CAStoTAS(speed, thetaSrs, deltaSrs);
     }
