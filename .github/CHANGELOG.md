@@ -175,6 +175,8 @@
 1. [MCDU] Improved Remote MCDU with CLR hold and light-dark mode - @frankkopp (Frank Kopp)
 1. [MCDU] Improved mcdu server command line handling  - @frankkopp (Cdr_Maverick#6475)
 1. [RA] Add dual Radio Altimeter simulation - @beheh (Benedict Etzel)
+1. [FMGC] Re-implement altitude and speed constraints - @tracernz (Mike)
+1. [FMGC] Implement "coarse" prediction system for turn speeds - @tracernz (Mike)
 
 ## 0.7.0
 

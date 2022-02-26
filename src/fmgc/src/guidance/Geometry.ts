@@ -134,10 +134,8 @@ export class Geometry {
                 continue;
             }
 
-            const predictWithCurrentSpeed = i < activeLegIdx + 3;
-
-            const predictedLegTas = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, predictWithCurrentSpeed ? tas : (Geometry.getLegPredictedTas(leg) ?? tas));
-            const predictedLegGs = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, predictWithCurrentSpeed ? gs : predictedLegTas); // FIXME temporary
+            const predictedLegTas = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, Geometry.getLegPredictedTas(leg) ?? tas);
+            const predictedLegGs = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, Geometry.getLegPredictedGs(leg) ?? gs);
 
             if (LnavConfig.DEBUG_GEOMETRY) {
                 console.log(`[FMS/Geometry/Recompute] Recomputing leg at #${i} (${leg?.repr ?? '<none>'})`);
@@ -160,10 +158,8 @@ export class Geometry {
 
                 // Recompute previous leg if inbound is an FXR, since we want it to end at the FXR transition path start
                 if (inboundTransition instanceof FixedRadiusTransition) {
-                    const predictWithCurrentSpeed = (i - 1) < activeLegIdx + 3;
-
-                    const prevLegPredictedLegTas = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, predictWithCurrentSpeed ? tas : (Geometry.getLegPredictedTas(prevLeg) ?? tas));
-                    const prevLegPredictedLegGs = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, predictWithCurrentSpeed ? gs : prevLegPredictedLegTas); // FIXME temporary
+                    const prevLegPredictedLegTas = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, Geometry.getLegPredictedTas(prevLeg) ?? tas);
+                    const prevLegPredictedLegGs = Math.max(LnavConfig.DEFAULT_MIN_PREDICTED_TAS, Geometry.getLegPredictedGs(prevLeg) ?? gs);
 
                     prevLeg.recomputeWithParameters(
                         activeLegIdx === i - 1,
@@ -194,11 +190,11 @@ export class Geometry {
     }
 
     static getLegPredictedTas(leg: Leg) {
-        if (leg instanceof TFLeg) {
-            return leg.to?.additionalData?.predictedSpeed;
-        }
+        return leg.predictedTas;
+    }
 
-        return undefined;
+    static getLegPredictedGs(leg: Leg) {
+        return leg.predictedGs;
     }
 
     /**
@@ -329,8 +325,8 @@ export class Geometry {
         return rad;
     }
 
-    getDistanceToGo(ppos): number | null {
-        const activeLeg = this.legs.get(1);
+    getDistanceToGo(activeLegIdx: number, ppos: LatLongAlt): number | null {
+        const activeLeg = this.legs.get(activeLegIdx);
         if (activeLeg) {
             return activeLeg.getDistanceToGo(ppos);
         }
