@@ -5,6 +5,14 @@
 <!-- Use the following format below -->
 <!--  1. [Changed Area] Title of changes - @github username (Name)  -->
 
+## 0.13.0
+
+1. [GENERAL] Fixed issue in C++ WASM Framework that caused performance degradation in some WASM modules - @frankkopp (Frank Kopp)
+1. [A380X/FCU] Fixed auto-initialisation of baro unit - @tracernz (Mike)
+1. [A380X/FCU] Fix baro-preselect not recognising baro unit changes - @tracernz (Mike)
+1. [A380X/FCU] QNH and altitude displays now correctly show "8" values during light test - @mattgogerly (Matt)
+1. [A380X/FCU] Added metric altitude button - @tracernz (Mike)
+
 ## 0.12.0
 
 1. [EFB/ATSU] Added NOAA (aviationweather.gov) as a METAR source - @tracernz (Mike)
@@ -121,6 +129,9 @@
 1. [FMS] Show runway ident on lateral/vertical revision page of the missed approach point - @BlueberryKing (BlueberryKing)
 1. [ECAM] Fixed ALL ECAM Button cycling through STS page and being inconsisten on press - @Maximilian-Reuter (\_chaoz_)
 1. [CDU] Fix for EFOB calculation not pulling from block fuel prior to engine start - @PatM (Patrick Macken)
+1. [FMS] Run vertical predictions without V-speeds - @BlueberryKing (BlueberryKing)
+1. [ELEC] Use ADIRU and LGCIU signals for speed and in flight determination - @Gurgel100 (Pascal)
+1. [FMS] Do not transmit bearing information to ND on manual legs - @BravoMike99 (bruno_pt99)
 
 ## 0.11.0
 
